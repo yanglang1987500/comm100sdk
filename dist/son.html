@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<script type="text/javascript" src="./comm100SDK.js"></script>
+	</head>
+	<body>
+		<button id='test'>测试</button>
+
+		<script type="text/javascript">
+			Comm100AgentConsoleAPI.onReady();
+			document.getElementById('test').addEventListener('click',function(){
+				Comm100AgentConsoleAPI.set('agentconsole.currentChat','yanglang').then(function(data){
+					console.log('设置成功',data);
+				})
+				Comm100AgentConsoleAPI.on('agentconsole.chats.chatEnd', function(chat) {
+					console.log('on的通知结果',chat)
+				}); 
+				Comm100AgentConsoleAPI.on('agentconsole.chats.chatEnd', function(chat) {
+					console.log('on的通知结果2',chat)
+				}); 
+			});
+		</script>
+	</body>
+</html>
