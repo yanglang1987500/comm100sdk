@@ -1,23 +1,50 @@
+<!DOCTYPE html>
 <html>
 	<head>
-		<script type="text/javascript" src="./comm100SDK.js"></script>
+	 	<meta charset="UTF-8">
+		<title>Knowledge Base</title>
+		<link rel="stylesheet" type="text/css" href="./css/main.css">
 	</head>
 	<body>
-		<button id='test'>测试</button>
-
-		<script type="text/javascript">
-			Comm100AgentConsoleAPI.onReady();
-			document.getElementById('test').addEventListener('click',function(){
-				Comm100AgentConsoleAPI.set('agentconsole.currentChat','yanglang').then(function(data){
-					console.log('设置成功',data);
-				})
-				Comm100AgentConsoleAPI.on('agentconsole.chats.chatEnd', function(chat) {
-					console.log('on的通知结果',chat)
-				}); 
-				Comm100AgentConsoleAPI.on('agentconsole.chats.chatEnd', function(chat) {
-					console.log('on的通知结果2',chat)
-				}); 
-			});
-		</script>
+		<div id='app'>
+			<div id="listView">
+				<div class="head">
+					<div class="left">
+						<span>Show</span>
+						<select name="pageSize" id="pageSize">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50">50</option>
+							<option value="100">100</option>
+						</select>
+						<span>entries</span>
+					</div>
+					<div class="right">
+						<span>Search:</span>
+						<input type="text" id='keyWord'>
+						<i id='clearBtn'>x</i>
+					</div>
+				</div>
+				<ul id='kblist'></ul>
+				<div class="foot">
+					<p id='pageMsg'>Showing to of entries</p>
+					<ul id='page-container'>
+						<li>1</li>
+						<li>2</li>
+						<li>3</li>
+					</ul>
+				</div>
+			</div>
+			<div id="detailView">
+				<i id="backBtn"></i>
+				<h2 id="detailTitle"></h2>
+				<p id="detailContent"></p>
+				<i class="btn-link"></i>
+				<i class="btn-content"></i>
+			</div>
+		</div>
+		<p style="display: none" id="tmpNode"></p>
+		<script type="text/javascript" src="./comm100SDK.js"></script>
+		<script type="text/javascript" src="./main.js"></script>
 	</body>
 </html>

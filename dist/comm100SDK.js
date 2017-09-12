@@ -160,43 +160,23 @@ var index =
 	     */
 	    call: function call(api, data, alive) {
 	        if (data.callback) {
-	            eventName = !alive ? EVENT_PREFIX + '_' + this.guid() : this.guid();
+	            //非临时事件使用api作为事件名称
+	            eventName = !alive ? EVENT_PREFIX + '_' + this.guid() : api;
 	            this.subscribe(eventName, data.callback);
 	        }
-	        window && window.parent && window.parent.postMessage({
+	        var messageObj = {
 	            api: api,
 	            action: data.action,
 	            params: data.params,
 	            msgId: eventName
-	        }, '*'); //TODO 暂时写死* 界时改为comm100服务器地址
+	        };
+	        var message = JSON.stringify(messageObj);
+	        window && window.parent && window.parent.postMessage(message, '*'); //TODO 暂时写死* 界时改为comm100服务器地址
 	
-	        console.log('call', {
-	            api: api,
-	            action: data.action,
-	            params: data.params,
-	            msgId: eventName
-	        });
+	        console.log('call', message);
 	        return this;
 	    }
 	};
-	
-	/**
-	 * 对象类型获取
-	 * @method Type
-	 * @param obj
-	 * @returns {number}
-	 * @constructor
-	 */
-	function Type(obj) {
-	    var type = Object.prototype.toString.call(obj);
-	    var _type = type.match(/^\[object\s(.*)\]$/)[1];
-	    return Type[_type] || Type.Object;
-	}
-	Type.Object = 1;
-	Type.Array = 2;
-	Type.String = 3;
-	Type.Function = 4;
-	Type.Number = 5;
 	
 	var Comm100AgentConsoleAPI = {
 	    onReady: function onReady(callback) {
@@ -205,7 +185,8 @@ var index =
 	                console.log('我是自己页面的消息，不予处理，返回');
 	                return;
 	            }
-	            _.notify(e.data.msgId, e.data);
+	            var data = JSON.parse(e.data);
+	            _.notify(data.msgId || data.api, data);
 	        }, false);
 	        callback && callback();
 	    },

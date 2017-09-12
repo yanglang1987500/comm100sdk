@@ -178,7 +178,7 @@ const Comm100AgentConsoleAPI = {
             _.call(key, {
                 action: 'do',
                 params: {
-                    value: value
+                    value: encodeURIComponent(value)
                 },
                 callback: (data)=> {
                     resolve(data);
