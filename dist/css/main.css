@@ -143,6 +143,7 @@ h2#detailTitle{
 	cursor: pointer;
 	text-align: center;
 	border:1px solid transparent;
+	margin-right:5px;
 }
 #page-container>li:hover{
 	border-color:#111111;
@@ -190,6 +191,10 @@ h2#detailTitle{
 	left:0;
 	top:0;
 	cursor: pointer;
+	opacity: .6;
+}
+#backBtn:hover{
+	opacity: 1;
 }
 #detailView .btn-content{
 	right:30px;

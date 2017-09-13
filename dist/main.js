@@ -16,7 +16,7 @@ window.onload = function(){
 		$listView = document.getElementById('listView'),
 		$backBtn = document.getElementById('backBtn'),
 		$btnLink = document.getElementById('btnLink'),
-		$btnContent = document.getElementById('btnContent')
+		$btnContent = document.getElementById('btnContent');
 
 	function init(){
 		bindEvents();
@@ -26,12 +26,16 @@ window.onload = function(){
 		render();
 	}
 
+	/**
+	 * @method {{bindEvents}} 绑定事件
+	 * @return {[type]} [description]
+	 */
 	function bindEvents(){
 		var keyup = debounce(function(){
 			pageNum = 0;
 			render();
 		},100)
-		$pageSize.addEventListener('change',render);
+		$pageSize.addEventListener('change',keyup);
 		$keyWord.addEventListener('keyup',keyup);
 		$clearBtn.addEventListener('click',function(){
 			$keyWord.value = '';
@@ -51,10 +55,9 @@ window.onload = function(){
 				$listView.style.display = 'none';
 				$detailView.style.display = 'block';
 			}else if(target.nodeName === 'I' && target.className === 'btn-link'){
-				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', data.title);
+				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', "https://www.canberra.edu.au/askuc/answer/?id=" + id);
 			}else if(target.nodeName === 'I' && target.className === 'btn-content'){
-				$tmp.innerHTML = data.content;
-				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', $tmp.innerText);
+				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', html2Text(data.content));
 			}
 		});
 		$backBtn.addEventListener('click',function(e){
@@ -68,34 +71,42 @@ window.onload = function(){
 				render();
 			}
 		});
+		$pageContainer.addEventListener('selectstart',function(e){
+			e.preventDefault();
+			e.stopPropagation();
+			return false;
+		});
 		$btnLink.addEventListener('click',function(e){
 			var id = this.getAttribute('data-id'),data = findData(id);
-			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', data.title);
+			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', "https://www.canberra.edu.au/askuc/answer/?id=" + id);
 		});
 		$btnContent.addEventListener('click',function(e){
 			var id = this.getAttribute('data-id'),data = findData(id);
-			$tmp.innerHTML = data.content;
-			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', $tmp.innerText);
+			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', html2Text(data.content));
 		});
 	}
 
 	init();
 
+	/**
+	 * @method {{render}} 刷新数据
+	 * @return {[type]} [description]
+	 */
 	function render(){
 		console.log('render.....')
 		var data = doFilter();
 		var html = '';
 		for(var i = 0;i<data.length;i++){
-			$tmp.innerHTML = data[i].content;
 			html += '<li data-id="'+data[i].knowledgearticleid+'">\
 			<h3>'+data[i].title+'</h3>\
-			<p>'+ ($tmp.innerText.substr(0,200)+'...')+'</p>\
+			<p>'+ (html2Text(data[i].content).substr(0,200)+'...')+'</p>\
 			<i class="btn-link"></i>\
 			<i class="btn-content"></i>\
 			</li>';
 		}
 		$list.innerHTML = html;
 
+		//计算分页显示页码
 		var footHtml = '';
 		for(var i = 1;i <= allPage;i++){
 			if(pageNum<4){
@@ -121,6 +132,8 @@ window.onload = function(){
 		}
 		$pageContainer.innerHTML = footHtml;
 		var pageSize = parseInt($pageSize.value) ;
+
+		//计算Showing start to end of total entries 信息
 		$pageMsg.innerHTML = 'Showing '+(function(){
 				var min = (pageNum*pageSize+1);
 				if(count == 0)
@@ -139,8 +152,13 @@ window.onload = function(){
 		})();
 	}
 
+	/**
+	 * @method {{doFilter}} 进行数据过滤操作
+	 * @return {[type]} [description]
+	 */
 	function doFilter(){
 		var tmpData = [], data = kbdata.value;
+		//step1 先过滤查询关键字
 		var key = $keyWord.value;
 		if(key.trim()!='')
 			for(var i = 0;i<data.length;i++){
@@ -149,20 +167,36 @@ window.onload = function(){
 			}
 		else
 			tmpData = JSON.parse(JSON.stringify(data));
+		//step2 再按分页参数进行slice
 		var pageSize = parseInt($pageSize.value);
-		count = tmpData.length;
-		allPage = Math.ceil(tmpData.length/pageSize);
+		count = tmpData.length; //计算数据总条数
+		allPage = Math.ceil(tmpData.length/pageSize); //计算总页数
 		if(pageSize > tmpData.length)
 			return tmpData; 
 		return tmpData.slice(pageNum*pageSize,(pageNum+1)*pageSize);
 	}
 
+	/**
+	 * @method {{findData}} 根据id从原始数据中查找相应数据
+	 * @param  {[type]} id [description]
+	 * @return {[type]}    [description]
+	 */
 	function findData(id){
 		var data = kbdata.value;
 		for(var i = 0;i<data.length;i++){
 			if(data[i].knowledgearticleid == id)
 				return data[i];
 		}
+	}
+
+	/**
+	 * @method {{html2Text}} 将html转换为纯文本
+	 * @param  {[type]} html [description]
+	 * @return {[type]}      [description]
+	 */
+	function html2Text(html){
+		$tmp.innerHTML = html;
+		return $tmp.innerText;
 	}
 	
     function debounce(func, wait, immediate) {
