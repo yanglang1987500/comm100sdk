@@ -109,14 +109,14 @@ window.onload = function(){
 		//计算分页显示页码
 		var footHtml = '';
 		for(var i = 1;i <= allPage;i++){
-			if(pageNum<4){
-				if(i<=5 || i==allPage){
+			if(pageNum<(maxFootNum-1)){
+				if(i<=maxFootNum || i==allPage){
 					footHtml += i==(pageNum+1)? '<li class="selected">'+i+'</li>':'<li>'+i+'</li>';
 				}
-				if(i==6)
+				if(i==(maxFootNum+1))
 						footHtml += '<span>...</span>';
-			}else if(pageNum >= (allPage-4)){
-				if(i==1 || i>= (allPage-4)){
+			}else if(pageNum >= (allPage-(maxFootNum-1))){
+				if(i==1 || i>= (allPage-(maxFootNum-1))){
 					footHtml += i==(pageNum+1) ? '<li class="selected">'+i+'</li>':'<li>'+i+'</li>';
 				}
 				if(i==2)
