@@ -31,12 +31,15 @@ window.onload = function(){
 	 * @return {[type]} [description]
 	 */
 	function bindEvents(){
-		var keyup = debounce(function(){
+		var keyup = function(){
 			pageNum = 0;
 			render();
-		},100)
+		}, _keyup = debounce(function(){
+			pageNum = 0;
+			render();
+		},300)
 		$pageSize.addEventListener('change',keyup);
-		$keyWord.addEventListener('keyup',keyup);
+		$keyWord.addEventListener('keyup',_keyup);
 		$clearBtn.addEventListener('click',function(){
 			$keyWord.value = '';
 			keyup();
