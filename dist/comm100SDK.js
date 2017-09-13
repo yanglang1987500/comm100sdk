@@ -227,7 +227,7 @@ var index =
 	            _.call(key, {
 	                action: 'do',
 	                params: {
-	                    value: value
+	                    value: encodeURIComponent(value)
 	                },
 	                callback: function callback(data) {
 	                    resolve(data);

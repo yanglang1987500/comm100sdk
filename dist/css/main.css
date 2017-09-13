@@ -74,7 +74,7 @@ table {
 #keyWord:focus + i{
 	display: block !important;
 }
-#kblist h3{
+#kblist h3,h2#detailTitle{
     font-family: "Segoe\000020UI\000020Semibold","Segoe\000020UI" !important;
 	font-size:13px;
 	font-weight: 600;
@@ -83,6 +83,9 @@ table {
 	color:#262626;
 	cursor: pointer;
 	margin-bottom: 5px;
+}
+h2#detailTitle{
+	font-size: 16px;
 }
 #kblist h3:hover{
 	text-decoration: underline;
@@ -170,6 +173,12 @@ table {
 #detailView{
 	display: none;
 	position: relative;
+	padding:50px 20px 0;
+
+}
+#detailView p{
+    line-height: 1.5;
+    font-size: 12px;
 }
 #backBtn{
 	background-image:url('../img/back.png');
@@ -181,4 +190,10 @@ table {
 	left:0;
 	top:0;
 	cursor: pointer;
+}
+#detailView .btn-content{
+	right:30px;
+}
+#detailView .btn-link{
+	right:55px;
 }

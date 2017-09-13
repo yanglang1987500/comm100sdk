@@ -14,11 +14,15 @@ window.onload = function(){
 		$clearBtn = document.getElementById('clearBtn'),
 		$detailView = document.getElementById('detailView'),
 		$listView = document.getElementById('listView'),
-		$backBtn = document.getElementById('backBtn')
+		$backBtn = document.getElementById('backBtn'),
+		$btnLink = document.getElementById('btnLink'),
+		$btnContent = document.getElementById('btnContent')
 
 	function init(){
 		bindEvents();
-
+		Comm100AgentConsoleAPI.onReady(function(){
+			Comm100AgentConsoleAPI.init();
+		});
 		render();
 	}
 
@@ -34,13 +38,23 @@ window.onload = function(){
 			keyup();
 		});
 		$list.addEventListener('click',function(e){
-			var target = e.srcElement;
+			var target = e.srcElement, id, data;
+			if(target.parentNode.nodeName === 'LI'){
+				id = target.parentNode.getAttribute('data-id');
+				data = findData(id);
+			}
 			if(target.nodeName === 'H3' && target.className === ''){
-				var data = findData(target.parentNode.getAttribute('data-id'));
 				$detailTitle.innerHTML = data.title;
 				$detailContent.innerHTML = data.content;
+				$btnLink.setAttribute('data-id',id);
+				$btnContent.setAttribute('data-id',id);
 				$listView.style.display = 'none';
 				$detailView.style.display = 'block';
+			}else if(target.nodeName === 'I' && target.className === 'btn-link'){
+				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', data.title);
+			}else if(target.nodeName === 'I' && target.className === 'btn-content'){
+				$tmp.innerHTML = data.content;
+				Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', $tmp.innerText);
 			}
 		});
 		$backBtn.addEventListener('click',function(e){
@@ -53,6 +67,15 @@ window.onload = function(){
 				pageNum = parseInt(target.innerText)-1;
 				render();
 			}
+		});
+		$btnLink.addEventListener('click',function(e){
+			var id = this.getAttribute('data-id'),data = findData(id);
+			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', data.title);
+		});
+		$btnContent.addEventListener('click',function(e){
+			var id = this.getAttribute('data-id'),data = findData(id);
+			$tmp.innerHTML = data.content;
+			Comm100AgentConsoleAPI.do('agentconsole.currentChat.send', $tmp.innerText);
 		});
 	}
 
