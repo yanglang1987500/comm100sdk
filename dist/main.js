@@ -27,7 +27,7 @@ window.onload = function(){
 	}
 
 	/**
-	 * @method {{bindEvents}} 绑定事件
+	 * @method {{bindEvents}} 
 	 * @return {[type]} [description]
 	 */
 	function bindEvents(){
@@ -92,7 +92,7 @@ window.onload = function(){
 	init();
 
 	/**
-	 * @method {{render}} 刷新数据
+	 * @method {{render}} 
 	 * @return {[type]} [description]
 	 */
 	function render(){
@@ -109,7 +109,6 @@ window.onload = function(){
 		}
 		$list.innerHTML = html;
 
-		//计算分页显示页码
 		var footHtml = '';
 		for(var i = 1;i <= allPage;i++){
 			if(pageNum<(maxFootNum-1)){
@@ -136,7 +135,6 @@ window.onload = function(){
 		$pageContainer.innerHTML = footHtml;
 		var pageSize = parseInt($pageSize.value) ;
 
-		//计算Showing start to end of total entries 信息
 		$pageMsg.innerHTML = 'Showing '+(function(){
 				var min = (pageNum*pageSize+1);
 				if(count == 0)
@@ -156,12 +154,11 @@ window.onload = function(){
 	}
 
 	/**
-	 * @method {{doFilter}} 进行数据过滤操作
+	 * @method {{doFilter}}
 	 * @return {[type]} [description]
 	 */
 	function doFilter(){
 		var tmpData = [], data = kbdata.value;
-		//step1 先过滤查询关键字
 		var key = $keyWord.value;
 		if(key.trim()!='')
 			for(var i = 0;i<data.length;i++){
@@ -170,17 +167,16 @@ window.onload = function(){
 			}
 		else
 			tmpData = JSON.parse(JSON.stringify(data));
-		//step2 再按分页参数进行slice
 		var pageSize = parseInt($pageSize.value);
-		count = tmpData.length; //计算数据总条数
-		allPage = Math.ceil(tmpData.length/pageSize); //计算总页数
+		count = tmpData.length; 
+		allPage = Math.ceil(tmpData.length/pageSize); 
 		if(pageSize > tmpData.length)
 			return tmpData; 
 		return tmpData.slice(pageNum*pageSize,(pageNum+1)*pageSize);
 	}
 
 	/**
-	 * @method {{findData}} 根据id从原始数据中查找相应数据
+	 * @method {{findData}} 
 	 * @param  {[type]} id [description]
 	 * @return {[type]}    [description]
 	 */
@@ -193,7 +189,7 @@ window.onload = function(){
 	}
 
 	/**
-	 * @method {{html2Text}} 将html转换为纯文本
+	 * @method {{html2Text}} 
 	 * @param  {[type]} html [description]
 	 * @return {[type]}      [description]
 	 */
@@ -203,11 +199,9 @@ window.onload = function(){
 	}
 	
     function debounce(func, wait, immediate) {
-        // immediate默认为false
         var timeout, args, context, timestamp, result;
 
         var later = function() {
-            // 当wait指定的时间间隔期间多次调用_.debounce返回的函数，则会不断更新timestamp的值，导致last < wait && last >= 0一直为true，从而不断启动新的计时器延时执行func
             var last = Date.now() - timestamp;
 
             if (last < wait && last >= 0) {
@@ -225,9 +219,7 @@ window.onload = function(){
             context = this;
             args = arguments;
             timestamp = Date.now();
-            // 第一次调用该方法时，且immediate为true，则调用func函数
             var callNow = immediate && !timeout;
-            // 在wait指定的时间间隔内首次调用该方法，则启动计时器定时调用func函数
             if (!timeout) timeout = setTimeout(later, wait);
             if (callNow) {
                 result = func.apply(context, args);
