@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	 	<meta charset="UTF-8">
+		<title>Knowledge Base</title>
+		<link rel="stylesheet" type="text/css" href="./css/main.css">
+	</head>
+	<body>
+		<div id='app'>
+			<div id='noLoginContainer'>
+				<p>You are not logged into your account.</p>
+				<div><a href='javascript:void(0)' id="authloginBtn">Login</a></div>
+			</div>
+			<div id='normalContainer'>
+				<div id="listView">
+					<div class="head">
+						<div class="left">
+							<span>Show</span>
+							<select name="pageSize" id="pageSize">
+								<option value="30">30</option>
+								<option value="25">25</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+							<span>entries</span>
+						</div>
+						<div class="search">
+							<input type="text" id='keyWord'>
+							<i id='clearBtn'></i>
+							<i id='searchBtn'></i>
+						</div>
+					</div>
+					<ul id='kblist'></ul>
+					<div class="foot">
+						<p id='pageMsg'></p>
+						<ul id='page-container'>
+							<li id="prevBtn"></li>
+							<li id="nextBtn"></li>
+						</ul>
+					</div>
+				</div>
+				<div id="detailView">
+					<i id="backBtn"></i>
+					<div class="title_container"><h2 id="detailTitle"></h2></div>
+					<div class="cotent_container"><p id="detailContent"></p></div>
+					<div class="btn_container">
+						<i class="btn" id="btnLink">Insert URL</i>
+						<i class="btn" id="btnContent">Insert Content</i>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p style="display: none" id="tmpNode"></p>
+		<div id='loading'><div></div></div>
+		<script type="text/javascript" src="./lib/adal.min.js"></script>
+		<script type="text/javascript" src="./lib/textversion.min.js"></script>
+		<script type="text/javascript" src="./comm100SDK.js"></script>
+		<script type="text/javascript" src="./main.js"></script>
+
+	</body>
+</html>

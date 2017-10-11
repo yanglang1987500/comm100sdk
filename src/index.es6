@@ -9,7 +9,7 @@
 const Events = {};
 const toBeNotify = [];
 const EVENT_PREFIX = 'TPE';
-
+const EVENT_INIT = 'agentconsole.init';
 
 const _ = {
   /*
@@ -23,12 +23,12 @@ const _ = {
     if (eventList) {
       const len = eventList.length;
       for (; i < len; i += 1) {
-        eventList[i].apply(this, toBeNotify.slice.call(...rest, 1));
+        eventList[i].apply(this, rest);
       }
     } else {
       toBeNotify.push({
         eventName,
-        data: toBeNotify.slice.call(...rest, 1),
+        data: rest,
         scope: this,
       });
     }
@@ -42,7 +42,7 @@ const _ = {
    */
   notifyWith(eventName, scope, ...rest) {
     if (arguments.length < 2) { throw new TypeError('arguments error'); }
-    this.notify.apply(scope, [eventName].concat(toBeNotify.slice.call(...rest, 2)));
+    this.notify.apply(scope, [eventName].concat(rest));
   },
   /*
    * @method subscribe
@@ -119,7 +119,6 @@ const _ = {
       }
     }
 
-    console.log('call', message);
     return this;
   },
 };
@@ -127,20 +126,28 @@ const _ = {
 
 const Comm100AgentConsoleAPI = {
   onReady(callback) {
+
     window.addEventListener('message', (e) => {
       if (e.source !== window.parent) {
-        console.log('from self return');
         return;
       }
       const data = JSON.parse(e.data);
       _.notify(data.msgId || data.api, data);
     }, false);
-    if (callback) {
-      callback();
+    const handler = (data)=>{
+      Comm100AgentConsoleAPI.config = data;
+      callback && callback();
     }
+   /* const condition = ()=>{
+      return (window !== window.parent) && (window.location.href.split('#')[0] != window.parent.location.href.split('#')[0]);
+    }
+    condition() ? this.get(EVENT_INIT).then(function(data){
+      handler(data);
+    }) : !/\bElectron/g.test(navigator.userAgent)*/
+    handler({isWeb:true});
   },
   init() {
-
+ 
   },
   get(key) {
     return new Promise((resolve) => {
@@ -148,7 +155,6 @@ const Comm100AgentConsoleAPI = {
         action: 'get',
         callback: (data) => {
           resolve(data);
-          console.log('resolve', data);
         },
       });
     });
@@ -162,7 +168,6 @@ const Comm100AgentConsoleAPI = {
         },
         callback: (data) => {
           resolve(data);
-          console.log('resolve', data);
         },
       });
     });
@@ -182,7 +187,6 @@ const Comm100AgentConsoleAPI = {
         },
         callback: (data) => {
           resolve(data);
-          console.log('resolve', data);
         },
       });
     });

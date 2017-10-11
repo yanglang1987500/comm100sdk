@@ -1,0 +1,12 @@
+{
+	"name": "ExtensionKB V1.0",
+	"index": "/index.html",
+	"icon": "/extension-icon.png",
+	"author": {
+		"name": "Jack",
+		"email": "jack@comm400.com",
+		"url": "livechat.canberra.edu.au"
+	},
+	"version": "1.0",
+	"manifestVersion": "1.0"
+}

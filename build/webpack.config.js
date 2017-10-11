@@ -7,7 +7,7 @@ const isProduction = false;
 module.exports = {
   devtool: 'source-map',
   entry: {
-    index: getPath('../src/index.es6')
+    index: ['babel-polyfill',getPath('../src/index.es6')]
   },
   output: {
     path: `${__dirname}/../dist`,

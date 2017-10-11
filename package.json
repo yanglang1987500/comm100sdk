@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --config ./build/webpack.config.js",
     "watch": "webpack -w --config ./build/webpack.config.js",
-    "demo": "webpack-dev-server --inline --hot --config ./build/webpack.config.js"
+    "start": "webpack-dev-server --inline --config ./build/webpack.config.js"
   },
   "author": "",
   "license": "MIT",
